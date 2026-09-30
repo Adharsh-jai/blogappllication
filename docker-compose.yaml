@@ -15,6 +15,7 @@ services:
     build:
       context: .
       dockerfile: templates/Dockerfile
+    image: ${DOCKER_USERNAME}/blog-frontend:v1
     ports:
       - "3000:80"
     networks:
@@ -23,6 +24,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME}/blog-backend:v1
     ports:
       - "5000:5000"
     environment:
@@ -31,7 +33,6 @@ services:
       - blog_network
 volumes:
   blog_app_postgres_data:
-    external: true
 
 networks:
   blog_network:
