@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - blog_app_postgres_data:/var/lib/postgresql/data
+    networks:
+      - blog_network
+  frontend:
+    build:
+      context: .
+      dockerfile: templates/Dockerfile
+    ports:
+      - "3000:80"
+    networks:
+      - blog_network
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    networks:
+      - blog_network
+volumes:
+  blog_app_postgres_data:
+    external: true
+
+networks:
+  blog_network:
+    driver: bridge
